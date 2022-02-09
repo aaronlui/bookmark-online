@@ -12,10 +12,10 @@ import configuration from './config/configuration';
     // 加载自定义配置文件
     ConfigModule.forRoot({
       load: [configuration],
+      isGlobal: true,
     }),
     // 配置TypeOrm
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const { host, port, username, password } =
@@ -26,7 +26,7 @@ import configuration from './config/configuration';
           port,
           username,
           password,
-          database: 'Bookmark-online',
+          database: 'bookmark_online',
           entities: ['dist/**/*.entity{.ts,.js}'],
           synchronize: true,
         };
