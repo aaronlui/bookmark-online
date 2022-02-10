@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { SkipJwtAuth } from './constants';
 import { LoginDto } from './dto/login.dto';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 
@@ -19,7 +20,7 @@ export class AuthController {
 
   @ApiOperation({ summary: '登录' })
   @ApiBody({ type: LoginDto })
-  @SetMetadata('isPublic', true)
+  @SkipJwtAuth()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {

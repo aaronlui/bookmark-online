@@ -2,6 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { AllExceptionFilter } from './filter/all-exception.filter';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
 
 async function bootstrap() {
@@ -9,8 +11,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
-
-  // TODO:  exception
+  app.useGlobalFilters(new HttpExceptionFilter(), new AllExceptionFilter());
 
   // 配置swagger
   const config = new DocumentBuilder()

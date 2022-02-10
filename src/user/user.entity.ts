@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
+import { Collection } from 'src/collection/collection.entity';
 
 @Entity()
 export class User {
@@ -27,12 +34,17 @@ export class User {
   createdTime: string;
 
   @ApiProperty({ description: '账号状态' })
-  @Column({ default: true })
-  isActive?: boolean;
+  @Column({ default: 1, name: 'is_active' })
+  isActive?: number;
 
   @ApiProperty({ description: '是否管理员' })
-  @Column({ default: false })
-  isAdmin?: boolean;
+  @Column({ default: 0, name: 'is_admin' })
+  isAdmin?: number;
+
+  @OneToMany(() => Collection, (collection) => collection.owner, {
+    cascade: true,
+  })
+  collections: Collection[];
 
   @BeforeInsert()
   private async hashPassword() {

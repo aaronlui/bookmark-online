@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { SkipJwtAuth } from 'src/auth/constants';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
@@ -35,6 +36,7 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @SkipJwtAuth()
   @ApiOperation({ summary: '创建用户' })
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()

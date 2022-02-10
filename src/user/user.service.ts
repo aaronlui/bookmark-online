@@ -19,8 +19,6 @@ export class UserService {
     user.email = email;
     user.password = password;
     user.createdTime = new Date().toISOString();
-    user.isActive = true;
-    user.isAdmin = false;
 
     return this.userRepository.save(user);
   }
