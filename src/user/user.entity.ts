@@ -17,29 +17,41 @@ export class User {
   id: number;
 
   @ApiProperty({ description: '用户名' })
-  @Column({ length: 500 })
+  @Column()
   username: string;
 
   @ApiProperty({ description: '密码' })
   @Exclude()
-  @Column({ length: 500 })
+  @Column()
   password: string;
 
   @ApiProperty({ description: '邮箱' })
-  @Column({ length: 500 })
+  @Column()
   email: string;
 
   @ApiProperty({ description: '注册时间' })
-  @Column({ length: 500 })
-  createdTime: string;
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_time',
+  })
+  createdTime: Date;
 
-  @ApiProperty({ description: '账号状态' })
-  @Column({ default: 1, name: 'is_active' })
-  isActive?: number;
+  @ApiProperty({ description: '更新时间' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'updated_time',
+  })
+  updatedTime: Date;
+
+  @ApiProperty({ description: '是否启用' })
+  @Column({ default: true, name: 'is_active' })
+  isActive?: boolean;
 
   @ApiProperty({ description: '是否管理员' })
-  @Column({ default: 0, name: 'is_admin' })
-  isAdmin?: number;
+  @Column({ default: false, name: 'is_admin' })
+  isAdmin?: boolean;
 
   @OneToMany(() => Collection, (collection) => collection.owner, {
     cascade: true,

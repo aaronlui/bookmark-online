@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/repository/user.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
+
+  async hashPassword(password) {
+    const salt = await bcrypt.genSalt();
+    return await bcrypt.hash(password, salt);
+  }
 
   async create(createUserDto: CreateUserDto) {
     const { username, email, password } = createUserDto;
@@ -18,7 +24,6 @@ export class UserService {
     user.username = username;
     user.email = email;
     user.password = password;
-    user.createdTime = new Date().toISOString();
 
     return this.userRepository.save(user);
   }
@@ -37,15 +42,14 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const { username, password, email } = updateUserDto;
-    const existUser = await this.findOne(id);
-    // BUG: 处理密码
+    if (password) {
+      updateUserDto.password = await this.hashPassword(password);
+    } else if (!username && !email) {
+      throw new BadRequestException();
+    }
     return this.userRepository.update(
       { id },
-      {
-        username: username || existUser.username,
-        password: password || existUser.password,
-        email: email || existUser.email,
-      },
+      { ...updateUserDto, updatedTime: new Date() },
     );
   }
 

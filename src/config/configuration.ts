@@ -4,7 +4,6 @@ export default () => {
     jwt: {
       secret: env.JWT_SECRET,
       expiresIn: env.JWT_EXPIRESIN,
-      publicKey: env.JWT_PUBLICKEY,
     },
     database: {
       host: env.DATABASE_HOST,
