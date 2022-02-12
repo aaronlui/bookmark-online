@@ -44,12 +44,10 @@ export class UserService {
     const { username, password, email } = updateUserDto;
     if (password) {
       updateUserDto.password = await this.hashPassword(password);
-    } else if (!username && !email) {
-      throw new BadRequestException();
     }
     return this.userRepository.update(
       { id },
-      { ...updateUserDto, updatedTime: new Date() },
+      { username, password, email, updatedTime: new Date() },
     );
   }
 

@@ -20,7 +20,6 @@ export class User {
   @Column()
   username: string;
 
-  @ApiProperty({ description: '密码' })
   @Exclude()
   @Column()
   password: string;
@@ -47,11 +46,11 @@ export class User {
 
   @ApiProperty({ description: '是否启用' })
   @Column({ default: true, name: 'is_active' })
-  isActive?: boolean;
+  isActive: boolean;
 
   @ApiProperty({ description: '是否管理员' })
   @Column({ default: false, name: 'is_admin' })
-  isAdmin?: boolean;
+  isAdmin: boolean;
 
   @OneToMany(() => Collection, (collection) => collection.owner, {
     cascade: true,

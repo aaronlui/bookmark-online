@@ -59,13 +59,15 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.update(id, updateUserDto);
+    await this.userService.update(id, updateUserDto);
+    return updateUserDto;
   }
 
   @ApiOperation({ summary: '删除用户' })
   @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.remove(id);
+    await this.userService.remove(id);
+    return { id };
   }
 }

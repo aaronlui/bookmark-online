@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsUrl } from 'class-validator';
 
 export class CreateCollectionDto {
   @ApiProperty({ description: '标题' })
